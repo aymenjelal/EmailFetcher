@@ -27,22 +27,28 @@ public class Email {
 
         driver.findElement(By.xpath("//*[@id=\"identifierNext\"]")).click();
 
-        Thread.sleep(4000);
+        Thread.sleep(2000);
         WebElement password = driver.findElement(By.xpath("/html/body/div[1]/div[1]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/span/div[1]/div/div[1]/div/div[1]/input"));
 
         password.sendKeys("password");
 
         driver.findElement(By.xpath("//*[@id=\"passwordNext\"]")).click();
 
-        List<WebElement> unreadEmails = driver.findElements(By.className("zE"));
+
 
         File file = new File("UnreadEmails.txt");
         FileWriter fileWriter = new FileWriter(file);
-        for (WebElement unreadEmail:unreadEmails) {
+        int counter =0;
 
-            //System.out.println(unreadEmail.getText());
-            String sender = unreadEmail.findElement(By.className("yW")).getText();
-            String subject = unreadEmail.findElement(By.className("y6")).getText();
+        for (int i = 0; i<5; i++){
+            List<WebElement> unreadEmails = driver.findElements(By.className("zE"));
+            for (WebElement unreadEmail:unreadEmails) {
+
+                //System.out.println(unreadEmail.getText());
+                //Thread.sleep(2000);
+                String sender = unreadEmail.findElement(By.className("yW")).getText();
+                String subject = unreadEmail.findElement(By.className("y6")).getText();
+                counter++;
 
 
                 fileWriter.write("Sender:- ");
@@ -50,8 +56,16 @@ public class Email {
                 fileWriter.write(" Subject:- ");
                 fileWriter.write(subject);
                 fileWriter.write("\n");
+            }
+
+            driver.findElement(By.xpath("//*[@id=\":lf\"]")).click();
+            Thread.sleep(1000);
+
         }
 
+
+        fileWriter.write("Total number of Unread Emails ");
+        fileWriter.write(""+counter);
         fileWriter.flush();
         fileWriter.close();
         Thread.sleep(7000);
